@@ -17,7 +17,7 @@ DEATH_RATE = 0.001
 INFECTION_DURATION = 100
 dt = 0.01
 fig, ax = plt.subplots(figsize=(12,8))
-BIG_G = 1e4
+BIG_G = 1e5
 gravity_points = []
 
 
@@ -185,7 +185,7 @@ def animate(i):
     return scatters
 
 
-population = Population(7)
+population = Population(10)
 
 def main():
     ax.set(xlim=(0, MAP_WIDTH), ylim=(0, MAP_HEIGHT))
