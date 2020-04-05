@@ -5,6 +5,7 @@
 #include "Position.hpp"
 
 
+const int BIG BOUDI = 0;
 const int MAP_HEIGHT = 1000;
 const int MAP_WIDTH = MAP_HEIGHT;
 const int INIT_POPULATION_SIZE = 200;
