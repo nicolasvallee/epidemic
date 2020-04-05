@@ -11,32 +11,30 @@ class Point
 {
 
     Position m_position;
-    Position m_speed{0,0};
-    int m_mass = 1;
-    bool m_mobile{true};
+    Position m_speed;
+    int m_mass;
+    bool m_mobile;
 
 public:
-    Point(Position position);
-    Point(Position position, Position speed);
-    Point(Position position, Position speed, int mass, bool mobile);
+    Point(Position position, Position speed = Position{0,0}, int mass=1, bool mobile=true);
 
-    Position get_position();
-    void set_position(Position pos);
-    int get_mass();
-    Position get_speed();
-    void set_speed(Position speed);
-    double get_distance_to(Point p);
+    Position getPosition();
+    void setPosition(Position pos);
+    int getMass();
+    Position getSpeed();
+    void setSpeed(Position speed);
+    double getDistanceTo(Point p);
 
-    bool is_safe_to_move(Position p);
+    bool isSafeToMove(Position p);
 
     //Points must be inside when calling this function
-    std::vector<Point> get_closest_walls();
+    std::vector<Point> getClosestWalls();
 
-    void put_back_inside();
+    void putBackInside();
 
-    virtual void update_speed();
+    virtual void updateSpeed();
 
-    Position get_gravity_force(Point point);
+    Position getGravityForce(Point point);
 
     void move();
 

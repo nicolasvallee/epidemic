@@ -13,15 +13,15 @@ public:
     Person(Position position, Position speed=Position{0,0}, Health health_state=SUSCEPTIBLE,
     int mass=1, bool mobile=true);
 
-    Health get_health_state();
-    void set_health_state(Health state);
+    Health getHealthState();
+    void setHealthState(Health state);
+    int getInfectionDuration();
 
-    void add_infection_duration();
-    bool has_recovered();
-    void update_speed();
-    void contaminate_population();
-
-    bool will_die();
+    void addInfectionDuration();
+    bool hasRecovered();
+    void updateSpeed();
+    void contaminatePopulation();
+    bool willDie();
 
 };
 

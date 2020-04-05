@@ -6,18 +6,18 @@
 #include "Position.hpp"
 #include "Person.hpp"
 
-std::vector<double> matrix_vector_product(std::vector<double> *matrix, Position vect);
+std::vector<double> matrixVectorProduct(std::vector<double> *matrix, Position vect);
 
-Position rotate_vector(Position vect, double angle); //trigonometric direction
+Position rotateVector(Position vect, double angle); //trigonometric direction
 
-std::vector<Person> generate_population(int size);
+std::vector<Person> generatePopulation(int size);
 
-double get_norm(Position P);
+double getNorm(Position P);
 
-void update_population();
+void updatePopulation();
 
-Position random_position();
+Position randomPosition();
 
-Position random_direction();
+Position randomDirection();
 
 #endif

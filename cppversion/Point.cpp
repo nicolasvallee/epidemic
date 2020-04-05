@@ -12,34 +12,33 @@ Point::Point(Position position, Position speed, int mass, bool mobile)
 }
 
 
-Position Point::get_position(){ return m_position;}
-void Point::set_position(Position pos)
+Position Point::getPosition(){ return m_position;}
+void Point::setPosition(Position pos)
 {
     if(m_mobile == true)
     {
         m_position = pos;
     }
 }
-int Point::get_mass(){return m_mass;}
+int Point::getMass(){return m_mass;}
 
-Position Point::get_speed(){ return m_speed; }
-void  Point::set_speed(Position speed){ m_speed = speed; }
+Position Point::getSpeed(){ return m_speed; }
+void  Point::setSpeed(Position speed){ m_speed = speed; }
 
 
-double Point::get_distance_to(Point p)
+double Point::getDistanceTo(Point p)
 {
     Position difference = m_position - p.m_position;
-
-    return get_norm(difference);
+    return getNorm(difference);
 }
 
-bool Point::is_safe_to_move(Position p)
+bool Point::isSafeToMove(Position p)
 {
     return (p.x >= 0 && p.x < MAP_HEIGHT && p.y >= 0 && p.y < MAP_WIDTH);
 }
 
 //Points must be inside when calling this function
-std::vector<Point> Point::get_closest_walls()
+std::vector<Point> Point::getClosestWalls()
 {
     std::vector<Point> walls;
     int x = m_position.x, y = m_position.y;
@@ -51,7 +50,7 @@ std::vector<Point> Point::get_closest_walls()
     return(walls);
 }
 
-void Point::put_back_inside()
+void Point::putBackInside()
 {                                        
     int px = m_position.x;
     int py = m_position.y;
@@ -69,14 +68,14 @@ void Point::put_back_inside()
     m_position = Position{x, y};
 }
 
-void Point::update_speed()
+void Point::updateSpeed()
 {    
     std::cout << "the INSIDE of this function should NOOOOT be called" << '\n';
 }
 
-Position Point::get_gravity_force(Point point)
+Position Point::getGravityForce(Point point)
 {
-    double dist = get_distance_to(point);
+    double dist = getDistanceTo(point);
     Position force;
     force = (point.m_position - m_position) * BIG_G * m_mass * point.m_mass * (1/pow((dist+1), 3));
     return force;
@@ -89,14 +88,14 @@ void Point::move()
     {  
         Position new_position = m_position;
     
-        update_speed();
+        updateSpeed();
         Position dpos = Position{m_speed.x * dt, m_speed.y * dt};
         new_position = new_position + dpos;
     
-        if(is_safe_to_move(new_position))
+        if(isSafeToMove(new_position))
             m_position = new_position;
         else
-            put_back_inside();
+            putBackInside();
         
     }
 }

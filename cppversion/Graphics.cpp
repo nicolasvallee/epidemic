@@ -5,7 +5,7 @@
 #include "Person.hpp"
 
 
-void take_screenshot()
+void takeScreenshot()
 {
     std::cout << "in graphics " << MAP_HEIGHT << '\n';
     sf::RenderTexture screen;
@@ -13,7 +13,7 @@ void take_screenshot()
     screen.clear(sf::Color::White);
 
     std::vector<sf::CircleShape> circles;
-    draw(circles);
+    getDrawing(circles);
     for(sf::CircleShape circle : circles)
         screen.draw(circle);
     screen.display();
@@ -25,10 +25,10 @@ void take_screenshot()
     screenshot.saveToFile("TEST.png");
 }
 
-sf::Color get_color(Person person)
+sf::Color getColor(Person person)
 {
     sf::Color color{sf::Color::Blue};
-    Health state = person.get_health_state();
+    Health state = person.getHealthState();
     if(state == SUSCEPTIBLE)
         color = sf::Color::Black;
     else if(state == INFECTIOUS)
@@ -41,26 +41,40 @@ sf::Color get_color(Person person)
     return color;
 }
 
-void draw(std::vector<sf::CircleShape> &sketch)
+void getDrawing(std::vector<sf::CircleShape> &sketch)
 {
     int size = population.size();
     for(int i = 0; i < size; i++)
     {
         Person person = population[i];
-        Position pos = person.get_position();
-        sf::Color color = get_color(person);
+        Position pos = person.getPosition();
+        int duration = person.getInfectionDuration();
+        bool newly_infected = (person.getHealthState() == INFECTIOUS >= 1 && duration <= 20);
+        if(newly_infected)
+        {
+            sf::CircleShape alert_circle;
+            alert_circle.setRadius(7);
+            alert_circle.setOutlineThickness(3);
+            alert_circle.setPosition({pos.x-3, pos.y-3});
+            alert_circle.setOutlineColor(sf::Color::Red);
+            sketch.push_back(alert_circle);
+        }
+
+        sf::Color color = getColor(person);
         sf::CircleShape circle;
         circle.setFillColor(color);
-        circle.setRadius(3);
+        circle.setRadius(4);
         circle.setPosition({pos.x,pos.y});
         sketch.push_back(circle);
     }
 }
 
-void launch_window()
+void launchWindow()
 {
 
     sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "M");
+    //window.setVerticalSyncEnabled(true);    
+    window.setFramerateLimit(60);
     bool is_dragging = false;
     //Position old_pos;
     while (window.isOpen())
@@ -73,7 +87,7 @@ void launch_window()
             if(event.type == sf::Event::KeyPressed)
             {
                 if(event.key.code == sf::Keyboard::F10)
-                    take_screenshot();
+                    takeScreenshot();
             }
             else if(event.type == sf::Event::MouseWheelScrolled)
             {
@@ -99,10 +113,10 @@ void launch_window()
                 window.close();
         }
 
-        update_population();
+        updatePopulation();
         window.clear(sf::Color::White);
         std::vector<sf::CircleShape> circles;
-        draw(circles);
+        getDrawing(circles);
         for(sf::CircleShape circle : circles)
             window.draw(circle);
 

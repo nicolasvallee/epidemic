@@ -4,9 +4,8 @@ LDFLAGS=-g
 LDLIBS=-lsfml-graphics -lsfml-window -lsfml-system
 SRCS=$(shell find . -name "*.cpp")
 OBJS=$(patsubst %.cpp, %.o, $(SRCS))
-INCLUDE=Constants.hpp
 
-epidemic-app : $(OBJS) $(INCLUDE)
+epidemic-app : $(OBJS)
 	$(CXX) $(LDFLAGS) -o epidemic-app $(OBJS) $(LDLIBS)
 
 %.o : %.cpp
