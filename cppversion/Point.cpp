@@ -6,10 +6,6 @@
 #include "Constants.hpp"
 #include "Utils.hpp"
 
-Point::Point(Position position)
-    :m_position{position}
-{
-}
 Point::Point(Position position, Position speed, int mass, bool mobile)
     :m_position{position}, m_speed{speed}, m_mass{mass}, m_mobile{mobile}
 {
@@ -32,7 +28,7 @@ void  Point::set_speed(Position speed){ m_speed = speed; }
 
 double Point::get_distance_to(Point p)
 {
-    Position difference = p.get_position() - get_speed();
+    Position difference = m_position - p.m_position;
 
     return get_norm(difference);
 }
@@ -50,7 +46,7 @@ std::vector<Point> Point::get_closest_walls()
     std::vector<Position> positions{{x,0}, {x,MAP_HEIGHT-1}, {0,y}, {MAP_WIDTH-1,y}};
     for(int i = 0; i < 4; i++)
     {    
-        walls.push_back(Point{positions[i], Position{0,0}, 10, false});
+        walls.push_back(Point{positions[i], Position{0,0}, WALL_MASS, false});
     }
     return(walls);
 }
@@ -80,7 +76,7 @@ void Point::update_speed()
 
 Position Point::get_gravity_force(Point point)
 {
-    double dist = get_norm(point.m_position);
+    double dist = get_distance_to(point);
     Position force;
     force = (point.m_position - m_position) * BIG_G * m_mass * point.m_mass * (1/pow((dist+1), 3));
     return force;
@@ -103,5 +99,4 @@ void Point::move()
             put_back_inside();
         
     }
-    
 }

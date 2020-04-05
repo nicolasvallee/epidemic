@@ -5,11 +5,6 @@
 #include "Utils.hpp"
 
 
-Person::Person(Position position, Health health_state)
-    : Point{position}, m_health_state{health_state}
-{
-}
-
 Person::Person(Position position, Position speed, Health health_state, int mass, bool mobile)
     : Point{position, speed, mass, mobile}, m_health_state{health_state}
 {
@@ -42,18 +37,16 @@ void Person::update_speed()
         force = force - g_force;
     }
     
-    int b = 4;
     Position perpendicular_force;
-    perpendicular_force = rotate_vector(get_speed(), (-2*(random() % 2 == 0)+1) * pi/4);
-    perpendicular_force = force * b;
+    perpendicular_force = rotate_vector(get_speed(), (double)(-2*(random() % 2 == 0)+1) * pi/2);
+    perpendicular_force = perpendicular_force * ROTATION_AMPLITUDE;
     force =  force + perpendicular_force;
 
     //random_force = np.array([randint(-100,100) for i in range(2)])
     //force = force + random_force
     
-    double viscosity = 0.02;
-    force = force - get_speed() * viscosity;
-    force = force - get_speed() * get_norm(get_speed()) * viscosity;
+    //viscosity
+    force = force - get_speed() * get_norm(get_speed()) * VISCOSITY;
     set_speed(get_speed() + force * (1/get_mass()) * dt);
 }
 
@@ -62,13 +55,13 @@ void Person::update_speed()
 void Person::contaminate_population()
 {
     for(Person person : population)
-        if(person.m_health_state == SUSCEPTIBLE && get_distance_to(person) <= INFECTION_RADIUS)
-            if(random()/(RAND_MAX+1) <= PROB_INFECION)
+        if(person.m_health_state == SUSCEPTIBLE && this->get_distance_to(person) <= INFECTION_RADIUS)
+            if((double)random()/RAND_MAX <= PROB_INFECION)
                 person.m_health_state = INFECTIOUS;
 }
 
 bool Person::will_die()
 {
-    double p = random() / (RAND_MAX + 1);
+    double p = (double)random() / RAND_MAX;
     return p <= DEATH_RATE;
 }

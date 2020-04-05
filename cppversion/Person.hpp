@@ -6,13 +6,13 @@
 
 class Person: public Point
 {
-    Health m_health_state = SUSCEPTIBLE; 
-    int a = MAP_WIDTH;
+    Health m_health_state = SUSCEPTIBLE;
     int m_infection_duration = 0;
     
 public:
-    Person(Position position, Health health_state);
-    Person(Position position, Position speed, Health health_state, int mass, bool mobile);
+    Person(Position position, Position speed=Position{0,0}, Health health_state=SUSCEPTIBLE,
+    int mass=1, bool mobile=true);
+
     Health get_health_state();
     void set_health_state(Health state);
 

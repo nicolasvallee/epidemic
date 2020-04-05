@@ -6,11 +6,13 @@
 #include "Graphics.hpp"
 
 
+std::vector<Person> population;
 
 int main()
 {
-    population = generate_population(10);
+    
     std::cout << MAP_HEIGHT << '\n';
+    population = generate_population(INIT_POPULATION_SIZE);
     //std::vector<std::vector<Person>> data;
 
     //data.push_back(population);
@@ -21,7 +23,7 @@ int main()
  //       data.push_back(population);
   //  }
     take_screenshot();
-
+    launch_window();
     return 0;
 }
 

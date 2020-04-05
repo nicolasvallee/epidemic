@@ -21,24 +21,27 @@ Position rotate_vector(Position vect, double angle) //trigonometric direction
 std::vector<Person> generate_population(int size)
 {
     std::vector<Person> population1;
-    Person patient_zero = Person(CENTER, INFECTIOUS);
+    Person patient_zero = Person(Position{MAP_WIDTH - 10,MAP_HEIGHT - 10}, Position{0,0},
+    INFECTIOUS, PERSON_MASS, IS_MOBILE);
     population1.push_back(patient_zero);
     for(int i = 0; i < size-1; i++)
     {
-        population1.push_back(Person(random_position(), SUSCEPTIBLE));
+        population1.push_back(Person(random_position(), Position{0,0}, SUSCEPTIBLE, PERSON_MASS, IS_MOBILE));
     }
     return population1;
 }
 
-double get_norm(Position P)
+double get_norm(Position vector)
 {
-    return(sqrt(pow((P.x),2) + pow((P.y),2)));
+    return(sqrt(pow((vector.x),2) + pow((vector.y),2)));
 }
 
 void update_population()
 {
-    for(Person person : population)
+    int size = population.size();
+    for(int i = 0; i < size; i++)
     {
+        Person &person = population[i];
         if(person.get_health_state() == DEAD)
             continue;
         if(person.get_health_state() == INFECTIOUS)

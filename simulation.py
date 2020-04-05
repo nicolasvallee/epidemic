@@ -4,20 +4,21 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from copy import deepcopy
 from math import sqrt,cos,sin
+import my_module
 
 MAP_HEIGHT = 500
 MAP_WIDTH = MAP_HEIGHT
 CENTER = (MAP_WIDTH/2, MAP_HEIGHT/2)
-NB_CYLES = 1000
+NB_CYLES = 500
 data = []
 SUSCEPTIBLE, INFECTIOUS, RECOVERED, DEAD = range(4)
 INFECTION_RADIUS = 20
 PROB_INFECION = 0.2
 DEATH_RATE = 0.001
 INFECTION_DURATION = 1000
-dt = 0.01
+dt = 1/60 #seconds
 fig, ax = plt.subplots(figsize=(12,8))
-BIG_G = 1e4
+BIG_G = 1e5
 gravity_points = []
 
 
@@ -114,7 +115,7 @@ class Person(Point):
         #random_force = np.array([randint(-100,100) for i in range(2)])
         #force = force + random_force
         
-        viscosity = 0.05
+        viscosity = 0.02
         force = force - viscosity * self.speed * np.linalg.norm(self.speed)
         vx, vy = self.speed + force / self.mass * dt
 
@@ -135,7 +136,6 @@ class Person(Point):
 def rotate_vector(vector, angle):       #trigonometric direction
     rotation_matrix = np.array([[cos(angle), -sin(angle)],
                                [sin(angle), cos(angle)]])
-
     return rotation_matrix.dot(vector)
 
 def generate_population(size):
@@ -162,6 +162,7 @@ def update_population():
                 person.health_state = RECOVERED
             else:
                 person.contaminate_population()
+
         person.move()
 
 
@@ -186,7 +187,7 @@ def animate(i):
 
 
 
-population = generate_population(30)
+population = generate_population(50)
 
 def main():
     ax.set(xlim=(0, MAP_WIDTH), ylim=(0, MAP_HEIGHT))
@@ -197,12 +198,12 @@ def main():
         update_population()
         data.append(deepcopy(population))
 
-    ani = animation.FuncAnimation(fig, animate,NB_CYLES, None, interval=dt*1000, blit=True, repeat=True)
+  #  ani = animation.FuncAnimation(fig, animate,NB_CYLES, None, interval=dt*1000, blit=True, repeat=True)
     #Writer = animation.writers['ffmpeg']
     #writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
     #ani.save("Video.mp4", writer="imagemagick")
-    plt.show()
+  #  plt.show()
 
 
-
-main()
+my_module.hi()
+#main()

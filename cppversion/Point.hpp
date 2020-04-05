@@ -11,12 +11,13 @@ class Point
 {
 
     Position m_position;
-    int m_mass{1};
-    bool m_mobile{true};
     Position m_speed{0,0};
+    int m_mass = 1;
+    bool m_mobile{true};
 
 public:
     Point(Position position);
+    Point(Position position, Position speed);
     Point(Position position, Position speed, int mass, bool mobile);
 
     Position get_position();

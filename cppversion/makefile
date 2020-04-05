@@ -1,16 +1,28 @@
+CXX=g++
 CPPFLAGS=-std=c++11 -Wall -g
 LDFLAGS=-g
 LDLIBS=-lsfml-graphics -lsfml-window -lsfml-system
 SRCS=$(shell find . -name "*.cpp")
 OBJS=$(patsubst %.cpp, %.o, $(SRCS))
+INCLUDE=Constants.hpp
 
-epidemic-app : $(OBJS)
-	g++ $(LDFLAGS) -o epidemic-app $(OBJS) $(LDLIBS)
+epidemic-app : $(OBJS) $(INCLUDE)
+	$(CXX) $(LDFLAGS) -o epidemic-app $(OBJS) $(LDLIBS)
 
 %.o : %.cpp
-	g++ -c -o $@ $(CPPFLAGS) $<
+	g++ $(CPPFLAGS) -MMD -c -o $@ $<
 
-clean :
+
+clean:
 	rm -f $(OBJS)
 
-dist-clean: clean
+
+depend: .depend
+
+.depend: $(SRCS)
+	rm -f ./.depend
+	$(CXX) $(CPPFLAGS) -MM $^ > ./.depend;
+
+include .depend
+
+
