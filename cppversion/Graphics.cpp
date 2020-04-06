@@ -3,17 +3,17 @@
 #include "Utils.hpp"
 #include "Constants.hpp"
 #include "Person.hpp"
+#include "Population.hpp"
 
 
-void takeScreenshot()
+void takeScreenshot(Population &population)
 {
     std::cout << "in graphics " << MAP_HEIGHT << '\n';
     sf::RenderTexture screen;
     screen.create(MAP_WIDTH, MAP_HEIGHT);
     screen.clear(sf::Color::White);
 
-    std::vector<sf::CircleShape> circles;
-    getDrawing(circles);
+    std::vector<sf::CircleShape> circles = getDrawing(population);
     for(sf::CircleShape circle : circles)
         screen.draw(circle);
     screen.display();
@@ -41,21 +41,20 @@ sf::Color getColor(Person person)
     return color;
 }
 
-void getDrawing(std::vector<sf::CircleShape> &sketch)
+std::vector<sf::CircleShape> getDrawing(Population &population)
 {
-    int size = population.size();
-    for(int i = 0; i < size; i++)
+    std::vector<sf::CircleShape> sketch;
+    for(const Person &person : population.getPeople())
     {
-        Person person = population[i];
         Position pos = person.getPosition();
         int duration = person.getInfectionDuration();
-        bool newly_infected = (person.getHealthState() == INFECTIOUS >= 1 && duration <= 20);
+        bool newly_infected = (person.getHealthState() == INFECTIOUS && duration >= 1 && duration <= 20);
         if(newly_infected)
         {
             sf::CircleShape alert_circle;
             alert_circle.setRadius(7);
             alert_circle.setOutlineThickness(3);
-            alert_circle.setPosition({pos.x-3, pos.y-3});
+            alert_circle.setPosition({(float)pos.x-3, (float)pos.y-3});
             alert_circle.setOutlineColor(sf::Color::Red);
             sketch.push_back(alert_circle);
         }
@@ -64,14 +63,16 @@ void getDrawing(std::vector<sf::CircleShape> &sketch)
         sf::CircleShape circle;
         circle.setFillColor(color);
         circle.setRadius(4);
-        circle.setPosition({pos.x,pos.y});
+        circle.setPosition({(float)pos.x,(float)pos.y});
         sketch.push_back(circle);
     }
+    return sketch;
 }
 
 void launchWindow()
 {
 
+    Population population(INIT_POPULATION_SIZE);
     sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "M");
     //window.setVerticalSyncEnabled(true);    
     window.setFramerateLimit(60);
@@ -87,7 +88,7 @@ void launchWindow()
             if(event.type == sf::Event::KeyPressed)
             {
                 if(event.key.code == sf::Keyboard::F10)
-                    takeScreenshot();
+                    takeScreenshot(population);
             }
             else if(event.type == sf::Event::MouseWheelScrolled)
             {
@@ -113,10 +114,9 @@ void launchWindow()
                 window.close();
         }
 
-        updatePopulation();
+        population.update();
         window.clear(sf::Color::White);
-        std::vector<sf::CircleShape> circles;
-        getDrawing(circles);
+        std::vector<sf::CircleShape> circles = getDrawing(population);
         for(sf::CircleShape circle : circles)
             window.draw(circle);
 

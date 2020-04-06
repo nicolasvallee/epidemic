@@ -3,11 +3,12 @@
 
 #include "SFML/Graphics.hpp"
 #include "Person.hpp"
+#include "Population.hpp"
 
-void takeScreenshot();
+void takeScreenshot(Population &population);
 //void launch_window();
 sf::Color getColor(Person person);
-void getDrawing(std::vector<sf::CircleShape> &sketch);
+std::vector<sf::CircleShape> getDrawing(Population &population);
 void launchWindow();
 
 #endif

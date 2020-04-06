@@ -1,6 +1,5 @@
 #include <cstdlib>
 #include "Person.hpp"
-#include "Position.hpp"
 #include "Constants.hpp"
 #include "Utils.hpp"
 
@@ -10,23 +9,18 @@ Person::Person(Position position, Position speed, Health health_state, int mass,
 {
 }
 
-Health Person::getHealthState(){ return m_health_state;}
-void Person::setHealthState(Health state){ m_health_state =  state;}
-int Person::getInfectionDuration(){return m_infection_duration;}
+Health Person::getHealthState() const { return m_health_state; }
 
-void Person::addInfectionDuration()
-{
-    m_infection_duration++;
-}
-bool Person::hasRecovered()
-{
-    return m_infection_duration > INFECTION_DURATION;
-}
+void Person::setHealthState(Health state) { m_health_state =  state; }
 
-void Person::updateSpeed()
+int Person::getInfectionDuration() const { return m_infection_duration; }
+
+void Person::addInfectionDuration() { m_infection_duration++; }
+
+void Person::updateSpeed(const std::vector<Person> &people) 
 {
     Position force{0,0};
-    for(Person person : population)
+    for(Person person : people)
     {       
         if(getDistanceTo(person) <= AVOID_PERSON_RADIUS)
         {
@@ -55,18 +49,20 @@ void Person::updateSpeed()
     setSpeed(getSpeed() + force * (1/getMass()) * dt * SPEED_FACTOR);
 }
 
-
-
-void Person::contaminatePopulation()
+bool Person::hasRecovered() const 
 {
-    for(Person &person : population)
+    return m_infection_duration > INFECTION_DURATION;
+}
+
+void Person::contaminate(std::vector<Person> &people)
+{
+    for(Person &person : people)
         if(person.m_health_state == SUSCEPTIBLE && getDistanceTo(person) <= INFECTION_RADIUS)
-            if((double)rand()/RAND_MAX <= PROB_INFECION)
+            if(randomUniform() <= PROB_INFECION)
                 person.m_health_state = INFECTIOUS;
 }
 
-bool Person::willDie()
+bool Person::willDie() const
 {
-    double p = (double)rand() / RAND_MAX;
-    return p <= DEATH_RATE;
+    return randomUniform() <= DEATH_RATE;
 }

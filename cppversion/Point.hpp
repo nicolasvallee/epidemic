@@ -18,23 +18,26 @@ class Point
 public:
     Point(Position position, Position speed = Position{0,0}, int mass=1, bool mobile=true);
 
-    Position getPosition();
-    void setPosition(Position pos);
-    int getMass();
-    Position getSpeed();
-    void setSpeed(Position speed);
-    double getDistanceTo(Point p);
+    Position getPosition() const;
 
-    bool isSafeToMove(Position p);
+    void setPosition(Position pos);
+
+    int getMass() const;
+
+    Position getSpeed() const;
+
+    void setSpeed(Position speed);
+
+    double getDistanceTo(Point p) const;
+
+    bool isSafeToMove(Position p) const;
 
     //Points must be inside when calling this function
-    std::vector<Point> getClosestWalls();
+    std::vector<Point> getClosestWalls() const;
 
     void putBackInside();
-
-    virtual void updateSpeed();
-
-    Position getGravityForce(Point point);
+    
+    Position getGravityForce(Point point) const;
 
     void move();
 

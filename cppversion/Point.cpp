@@ -2,7 +2,6 @@
 #include <vector> 
 #include <cmath>
 #include "Point.hpp"
-#include "Position.hpp"
 #include "Constants.hpp"
 #include "Utils.hpp"
 
@@ -12,7 +11,8 @@ Point::Point(Position position, Position speed, int mass, bool mobile)
 }
 
 
-Position Point::getPosition(){ return m_position;}
+Position Point::getPosition() const { return m_position;}
+
 void Point::setPosition(Position pos)
 {
     if(m_mobile == true)
@@ -20,28 +20,29 @@ void Point::setPosition(Position pos)
         m_position = pos;
     }
 }
-int Point::getMass(){return m_mass;}
+int Point::getMass() const {return m_mass;}
 
-Position Point::getSpeed(){ return m_speed; }
+Position Point::getSpeed() const{ return m_speed; }
+
 void  Point::setSpeed(Position speed){ m_speed = speed; }
 
 
-double Point::getDistanceTo(Point p)
+double Point::getDistanceTo(Point p) const
 {
     Position difference = m_position - p.m_position;
     return getNorm(difference);
 }
 
-bool Point::isSafeToMove(Position p)
+bool Point::isSafeToMove(Position p) const
 {
-    return (p.x >= 0 && p.x < MAP_HEIGHT && p.y >= 0 && p.y < MAP_WIDTH);
+    return (p.x >= 0 && p.x < MAP_WIDTH && p.y >= 0 && p.y < MAP_HEIGHT);
 }
 
 //Points must be inside when calling this function
-std::vector<Point> Point::getClosestWalls()
+std::vector<Point> Point::getClosestWalls() const
 {
     std::vector<Point> walls;
-    int x = m_position.x, y = m_position.y;
+    double x = m_position.x, y = m_position.y;
     std::vector<Position> positions{{x,0}, {x,MAP_HEIGHT-1}, {0,y}, {MAP_WIDTH-1,y}};
     for(int i = 0; i < 4; i++)
     {    
@@ -65,19 +66,14 @@ void Point::putBackInside()
     else if(py > MAP_HEIGHT-1)
         y = MAP_HEIGHT - 1;
 
-    m_position = Position{x, y};
+    m_position = Position{(double)x, (double)y};
 }
 
-void Point::updateSpeed()
-{    
-    std::cout << "the INSIDE of this function should NOOOOT be called" << '\n';
-}
-
-Position Point::getGravityForce(Point point)
+Position Point::getGravityForce(Point point) const
 {
     double dist = getDistanceTo(point);
     Position force;
-    force = (point.m_position - m_position) * BIG_G * m_mass * point.m_mass * (1/pow((dist+1), 3));
+    force = (point.m_position - m_position) * BIG_G * m_mass * point.m_mass * (1/pow((dist+0.1), 3));
     return force;
 }
 
@@ -87,11 +83,9 @@ void Point::move()
     if(m_mobile == true)
     {  
         Position new_position = m_position;
-    
-        updateSpeed();
         Position dpos = Position{m_speed.x * dt, m_speed.y * dt};
         new_position = new_position + dpos;
-    
+
         if(isSafeToMove(new_position))
             m_position = new_position;
         else
