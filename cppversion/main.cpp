@@ -8,7 +8,6 @@ int main()
 {
     srand(time(0));
     
-    std::cout << MAP_HEIGHT << '\n';
     //std::vector<std::vector<Person>> data;
 
     //data.push_back(community);

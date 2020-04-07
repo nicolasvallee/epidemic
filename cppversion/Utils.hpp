@@ -20,8 +20,10 @@ double getNorm(Position P);
 
 float randomUniform();
 
-Position randomPosition();
+Position randomPosition(Position upper_left_bound = UPPER_LEFT_MAP,
+                        Position lower_left_bound = LOWER_RIGHT_MAP);
 
 Position randomDirection();
+
 
 #endif

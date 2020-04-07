@@ -33,9 +33,24 @@ double Point::getDistanceTo(Point p) const
     return getNorm(difference);
 }
 
+std::vector<Position> Point::getBounds() const
+{
+    std::vector<Position> bounds = {UPPER_LEFT_MAP, LOWER_RIGHT_MAP};
+    return bounds;
+}
+
 bool Point::isSafeToMove(Position p) const
 {
-    return (p.x >= 0 && p.x < MAP_WIDTH && p.y >= 0 && p.y < MAP_HEIGHT);
+    //Bounds are included : they are safe to move onto.
+    //Rememeber that the origin of the screen (0,0) is at the TOP left corner
+    //This implies that upper_ has a lower y coordinate than lower_ ...
+    std::vector<Position> bounds = getBounds();
+    Position upper_left_bound = bounds[0];
+    Position lower_right_bound = bounds[1];
+    bool safe = p.x >= upper_left_bound.x && p.x <= lower_right_bound.x 
+            && p.y >= upper_left_bound.y && p.y <= lower_right_bound.y;
+
+    return safe;
 }
 
 //Points must be inside when calling this function
@@ -43,30 +58,36 @@ std::vector<Point> Point::getClosestWalls() const
 {
     std::vector<Point> walls;
     double x = m_position.x, y = m_position.y;
-    std::vector<Position> positions{{x,0}, {x,MAP_HEIGHT-1}, {0,y}, {MAP_WIDTH-1,y}};
+    std::vector<Position> bounds = getBounds();
+    Position upper_left = bounds[0];
+    Position lower_right = bounds[1];
+    std::vector<Position> wall_positions;
+    wall_positions.push_back({x,upper_left.y});
+    wall_positions.push_back({x,lower_right.y});
+    wall_positions.push_back({upper_left.x,y});
+    wall_positions.push_back({lower_right.x,y});
+
     for(int i = 0; i < 4; i++)
-    {    
-        walls.push_back(Point{positions[i], Position{0,0}, WALL_MASS, false});
-    }
+        walls.push_back(Point{wall_positions[i], Position{0,0}, WALL_MASS, false});
+
     return(walls);
 }
 
 void Point::putBackInside()
-{                                        
-    int px = m_position.x;
-    int py = m_position.y;
-    int x = px, y = py;
+{                         
+    std::vector<Position> bounds = getBounds();
+    Position upper_left = bounds[0];
+    Position lower_down = bounds[1];
 
-    if(px < 0)
-        x = 0;
-    else if(px > MAP_WIDTH-1)
-        x = MAP_WIDTH - 1;
-    if(py < 0)
-        y = 0;
-    else if(py > MAP_HEIGHT-1)
-        y = MAP_HEIGHT - 1;
+    if(m_position.x < upper_left.x)
+        m_position.x = upper_left.x+1;
+    else if(m_position.x > lower_down.x)
+        m_position.x = lower_down.x-1;
+    if(m_position.y < upper_left.y)
+        m_position.y = upper_left.y+1;
+    else if(m_position.y > lower_down.y)
+        m_position.y = lower_down.y-1;
 
-    m_position = Position{(double)x, (double)y};
 }
 
 Position Point::getGravityForce(Point point) const

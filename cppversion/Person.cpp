@@ -3,7 +3,6 @@
 #include "Constants.hpp"
 #include "Utils.hpp"
 
-
 Person::Person(Position position, Position speed, Health health_state, int mass, bool mobile)
     : Point{position, speed, mass, mobile}, m_health_state{health_state}
 {
@@ -14,6 +13,12 @@ Health Person::getHealthState() const { return m_health_state; }
 void Person::setHealthState(Health state) { m_health_state =  state; }
 
 int Person::getInfectionDuration() const { return m_infection_duration; }
+
+Community* Person::getCommunity(){return m_community;}
+
+void Person::setCommunity(Community *community){m_community = community;}
+
+std::vector<Position> Person::getBounds() const { return m_community->getBounds();}
 
 void Person::addInfectionDuration() { m_infection_duration++; }
 

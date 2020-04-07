@@ -2,6 +2,7 @@
 #define WORLD_H
 #include <vector>
 #include "Community.hpp"
+#include "Position.hpp"
 
 class World
 {
@@ -10,6 +11,7 @@ class World
 public:
     World(int nb_communities, int community_size);
     
+    int getNumberCommunities() const;
     const std::vector<Community>& getCommunities() const;
 
     void update();

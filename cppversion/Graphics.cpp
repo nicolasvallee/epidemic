@@ -79,7 +79,7 @@ std::vector<sf::CircleShape> getDrawing(World &world)
 void launchWindow()
 {
 
-    World world(1, INIT_COMMUNITY_SIZE);
+    World world(NB_COMMUNITIES, INIT_COMMUNITY_SIZE);
     sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "M");
     //window.setVerticalSyncEnabled(true);    
     window.setFramerateLimit(60);
@@ -126,7 +126,7 @@ void launchWindow()
         std::vector<sf::CircleShape> circles = getDrawing(world);
         for(sf::CircleShape circle : circles)
             window.draw(circle);
-        
+
         window.display();
     }
     window.close();

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Position.hpp"
+#include "Constants.hpp"
 
 //community is given to move() and update_speed() -> is that bad ?
 
@@ -29,6 +30,8 @@ public:
     void setSpeed(Position speed);
 
     double getDistanceTo(Point p) const;
+
+    virtual std::vector<Position> getBounds() const;
 
     bool isSafeToMove(Position p) const;
 

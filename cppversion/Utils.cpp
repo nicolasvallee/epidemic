@@ -28,11 +28,14 @@ float randomUniform()
     return rand() / (RAND_MAX + 1.0);
 }
 
-Position randomPosition()
+Position randomPosition(Position upper_left_bound, Position lower_left_bound)
 {   
-    return Position{(double)(rand() % MAP_WIDTH),
-                    (double)(rand() % MAP_HEIGHT)};
-    
+    int width = (lower_left_bound - upper_left_bound).x;
+    int height = (lower_left_bound - upper_left_bound).y;
+    Position randPos = Position{(double)(rand() % width),
+                                 (double)(rand() % height)};
+                                 
+    return upper_left_bound + randPos;    
 }
 
 Position randomDirection()
