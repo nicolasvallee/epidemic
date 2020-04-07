@@ -103,7 +103,7 @@ class Person(Point):
 
     def update_speed(self):
         force = np.array([0,0])
-        for person in population:
+        for person in community:
                 force = force - self.get_gravity_force(person)
         walls = self.get_closest_walls()
         for wall in walls:
@@ -121,8 +121,8 @@ class Person(Point):
 
         self.speed = np.array([vx, vy])
     
-    def contaminate_population(self):
-        for person in population:
+    def contaminate_community(self):
+        for person in community:
             if person.health_state == SUSCEPTIBLE and self.get_distance_to(person) <= INFECTION_RADIUS:
                 if random() <= PROB_INFECION:
                     person.health_state = INFECTIOUS
@@ -138,18 +138,18 @@ def rotate_vector(vector, angle):       #trigonometric direction
                                [sin(angle), cos(angle)]])
     return rotation_matrix.dot(vector)
 
-def generate_population(size):
-    population = []
+def generate_community(size):
+    community = []
     patient_zero = Person(np.array(CENTER), INFECTIOUS, mass = 1, speed=np.array([0,0]))
-    population.append(patient_zero)
+    community.append(patient_zero)
     for i_person in range(size-1):
-        population.append(Person(random_position(), SUSCEPTIBLE, speed=random_direction()))
-    return population 
+        community.append(Person(random_position(), SUSCEPTIBLE, speed=random_direction()))
+    return community 
 
 
 
-def update_population():
-    for person in population:
+def update_community():
+    for person in community:
         if person.health_state == DEAD:
             continue
         if person.health_state == INFECTIOUS:
@@ -161,7 +161,7 @@ def update_population():
             if person.infection_duration > INFECTION_DURATION:
                 person.health_state = RECOVERED
             else:
-                person.contaminate_population()
+                person.contaminate_community()
 
         person.move()
 
@@ -187,16 +187,16 @@ def animate(i):
 
 
 
-population = generate_population(50)
+community = generate_community(50)
 
 def main():
     ax.set(xlim=(0, MAP_WIDTH), ylim=(0, MAP_HEIGHT))
 
-    data.append(deepcopy(population))
+    data.append(deepcopy(community))
 
     for i in range(NB_CYLES):
-        update_population()
-        data.append(deepcopy(population))
+        update_community()
+        data.append(deepcopy(community))
 
   #  ani = animation.FuncAnimation(fig, animate,NB_CYLES, None, interval=dt*1000, blit=True, repeat=True)
     #Writer = animation.writers['ffmpeg']

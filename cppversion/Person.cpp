@@ -57,7 +57,8 @@ bool Person::hasRecovered() const
 void Person::contaminate(std::vector<Person> &people)
 {
     for(Person &person : people)
-        if(person.m_health_state == SUSCEPTIBLE && getDistanceTo(person) <= INFECTION_RADIUS)
+        if(person.m_health_state == SUSCEPTIBLE 
+        && getDistanceTo(person) <= INFECTION_RADIUS)
             if(randomUniform() <= PROB_INFECION)
                 person.m_health_state = INFECTIOUS;
 }

@@ -1,7 +1,9 @@
-#include "Population.hpp"
+#include "Community.hpp"
 #include "Utils.hpp"
 
-Population::Population(int size)
+
+
+Community::Community(int size)
 {
     Person patient_zero = Person(CENTER, randomDirection(),
     INFECTIOUS, PERSON_MASS, IS_MOBILE);
@@ -13,11 +15,13 @@ Population::Population(int size)
     
 }
 
-int Population::getSize() const {return m_people.size();}
+int Community::getSize() const {return m_people.size();}
 
-std::vector<Person> &Population::getPeople() {return m_people;}
+std::vector<Person>& Community::getPeople() {return m_people;}
 
-void Population::update()
+const std::vector<Person>& Community::getPeopleConst() const {return m_people;}
+
+void Community::update()
 {
     int size = getSize();
     for(int i = 0; i < size; i++)

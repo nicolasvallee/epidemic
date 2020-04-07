@@ -1,19 +1,20 @@
 #include <iostream>
+#include "World.hpp"
 #include "Graphics.hpp"
 #include "Utils.hpp"
 #include "Constants.hpp"
 #include "Person.hpp"
-#include "Population.hpp"
+#include "Community.hpp"
 
 
-void takeScreenshot(Population &population)
+void takeScreenshot(World &world)
 {
     std::cout << "in graphics " << MAP_HEIGHT << '\n';
     sf::RenderTexture screen;
     screen.create(MAP_WIDTH, MAP_HEIGHT);
     screen.clear(sf::Color::White);
 
-    std::vector<sf::CircleShape> circles = getDrawing(population);
+    std::vector<sf::CircleShape> circles = getDrawing(world);
     for(sf::CircleShape circle : circles)
         screen.draw(circle);
     screen.display();
@@ -41,30 +42,36 @@ sf::Color getColor(Person person)
     return color;
 }
 
-std::vector<sf::CircleShape> getDrawing(Population &population)
+std::vector<sf::CircleShape> getDrawing(World &world)
 {
     std::vector<sf::CircleShape> sketch;
-    for(const Person &person : population.getPeople())
+    const std::vector<Community>& communities = world.getCommunities();
+    for(const Community &community : communities)
     {
-        Position pos = person.getPosition();
-        int duration = person.getInfectionDuration();
-        bool newly_infected = (person.getHealthState() == INFECTIOUS && duration >= 1 && duration <= 20);
-        if(newly_infected)
+        const std::vector<Person>& people = community.getPeopleConst();
+        for(const Person &person : people)
         {
-            sf::CircleShape alert_circle;
-            alert_circle.setRadius(7);
-            alert_circle.setOutlineThickness(3);
-            alert_circle.setPosition({(float)pos.x-3, (float)pos.y-3});
-            alert_circle.setOutlineColor(sf::Color::Red);
-            sketch.push_back(alert_circle);
-        }
+            Position pos = person.getPosition();
+            int duration = person.getInfectionDuration();
+            bool newly_infected = (person.getHealthState() == INFECTIOUS 
+                                && duration >= 1 && duration <= 20);
+            if(newly_infected)
+            {
+                sf::CircleShape alert_circle;
+                alert_circle.setRadius(7);
+                alert_circle.setOutlineThickness(3);
+                alert_circle.setPosition({(float)pos.x-3, (float)pos.y-3});
+                alert_circle.setOutlineColor(sf::Color::Red);
+                sketch.push_back(alert_circle);
+            }
 
-        sf::Color color = getColor(person);
-        sf::CircleShape circle;
-        circle.setFillColor(color);
-        circle.setRadius(4);
-        circle.setPosition({(float)pos.x,(float)pos.y});
-        sketch.push_back(circle);
+            sf::Color color = getColor(person);
+            sf::CircleShape circle;
+            circle.setFillColor(color);
+            circle.setRadius(4);
+            circle.setPosition({(float)pos.x,(float)pos.y});
+            sketch.push_back(circle);
+        }
     }
     return sketch;
 }
@@ -72,7 +79,7 @@ std::vector<sf::CircleShape> getDrawing(Population &population)
 void launchWindow()
 {
 
-    Population population(INIT_POPULATION_SIZE);
+    World world(1, INIT_COMMUNITY_SIZE);
     sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "M");
     //window.setVerticalSyncEnabled(true);    
     window.setFramerateLimit(60);
@@ -88,7 +95,7 @@ void launchWindow()
             if(event.type == sf::Event::KeyPressed)
             {
                 if(event.key.code == sf::Keyboard::F10)
-                    takeScreenshot(population);
+                    takeScreenshot(world);
             }
             else if(event.type == sf::Event::MouseWheelScrolled)
             {
@@ -114,12 +121,12 @@ void launchWindow()
                 window.close();
         }
 
-        population.update();
+        world.update();
         window.clear(sf::Color::White);
-        std::vector<sf::CircleShape> circles = getDrawing(population);
+        std::vector<sf::CircleShape> circles = getDrawing(world);
         for(sf::CircleShape circle : circles)
             window.draw(circle);
-
+        
         window.display();
     }
     window.close();

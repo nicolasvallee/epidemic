@@ -7,7 +7,7 @@
 
 const int MAP_HEIGHT = 1000;
 const int MAP_WIDTH = 1500;
-const int INIT_POPULATION_SIZE = 400;
+const int INIT_COMMUNITY_SIZE = 500;
 const int NB_CYLES = 100;
 enum Health{SUSCEPTIBLE, INFECTIOUS, RECOVERED, DEAD};
 

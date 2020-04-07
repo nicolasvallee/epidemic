@@ -4,7 +4,7 @@
 #include <vector>
 #include "Position.hpp"
 
-//population is given to move() and update_speed() -> is that bad ?
+//community is given to move() and update_speed() -> is that bad ?
 
 
 class Point

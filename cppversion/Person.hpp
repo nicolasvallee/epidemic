@@ -4,7 +4,7 @@
 #include "Point.hpp"
 #include "Constants.hpp"
 
-class Population;
+class Community;
 
 class Person: public Point
 {
@@ -13,6 +13,7 @@ class Person: public Point
     
 public:
     Person(Position position, Position speed=Position{0,0},
+    
     Health health_state=SUSCEPTIBLE,
     int mass=1, bool mobile=true);
 

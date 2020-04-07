@@ -11,12 +11,12 @@ int main()
     std::cout << MAP_HEIGHT << '\n';
     //std::vector<std::vector<Person>> data;
 
-    //data.push_back(population);
+    //data.push_back(community);
 
    // for(int i = 0; i < NB_CYLES; i++)
  //   {
-  //      update_population();
- //       data.push_back(population);
+  //      update_community();
+ //       data.push_back(community);
   //  }
   
     launchWindow();

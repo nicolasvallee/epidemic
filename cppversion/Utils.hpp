@@ -8,9 +8,9 @@
 
 
 
-std::vector<Person> generatePopulation(int size);
+std::vector<Person> generateCommunity(int size);
 
-void updatePopulation();
+void updateCommunity();
 
 std::vector<double> matrixVectorProduct(std::vector<double> *matrix, Position vect);
 
