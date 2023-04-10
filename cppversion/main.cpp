@@ -8,14 +8,14 @@ int main()
 {
     srand(time(0));
     
-    //std::vector<std::vector<Person>> data;
+  //std::vector<std::vector<Person>> data;
 
-    //data.push_back(community);
+  //data.push_back(community);
 
-   // for(int i = 0; i < NB_CYLES; i++)
- //   {
+  // for(int i = 0; i < NB_CYLES; i++)
+  //   {
   //      update_community();
- //       data.push_back(community);
+  //       data.push_back(community);
   //  }
   
     launchWindow();

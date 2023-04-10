@@ -1,6 +1,7 @@
 #include "Community.hpp"
 #include "Utils.hpp"
 #include <iostream>
+#include <algorithm>
 
 
 Community::Community(int size, Position upper_left_bound, Position lower_left_bound)
@@ -73,5 +74,24 @@ void Community::update()
         }
         person.move();
         person.updateSpeed(getPeople());
+        if(randomUniform() <= 0.001)
+        {
+            person.goTo(person.getCommunity()->getCenter());
+        }
     }
 }
+
+void Community::commutePeopleTo(Community *community)
+{
+    int nb_commuters = 1;
+    nb_commuters = std::min(nb_commuters, (int)m_people.size());
+    for(int i = 0; i < nb_commuters; i++)
+    {
+        Person person = m_people.back();
+        m_people.pop_back();
+        person.travelToCommunity(community);
+        community->m_people.push_back(person);
+    }
+}
+
+

@@ -1,6 +1,7 @@
+#include <iostream>
 #include <vector>
 #include "World.hpp"
-#include <iostream>
+#include "Utils.hpp"
 class Community;
 
 World::World(int nb_communities, int community_size)
@@ -61,5 +62,9 @@ void World::update()
     for(int i = 0; i < getNumberCommunities(); i++)
     {
         m_communities[i].update();
+        int random_community_id = rand() % getNumberCommunities(); 
+        Community *travel_destination = &m_communities[random_community_id];
+        m_communities[i].commutePeopleTo(travel_destination);
     }
+
 }

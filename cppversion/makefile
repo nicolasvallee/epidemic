@@ -1,5 +1,5 @@
 CXX=g++
-CPPFLAGS=-std=c++11 -Wall -g
+CPPFLAGS=-std=c++17 -Wall -g
 LDFLAGS=-g
 LDLIBS=-lsfml-graphics -lsfml-window -lsfml-system
 SRCS=$(shell find . -name "*.cpp")

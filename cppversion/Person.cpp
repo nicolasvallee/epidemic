@@ -20,10 +20,42 @@ void Person::setCommunity(Community *community){m_community = community;}
 
 std::vector<Position> Person::getBounds() const { return m_community->getBounds();}
 
+Position Person::getDestination() const { return m_destination;}
+
+void Person::goTo(Position destination)
+{
+    m_travelling = true;
+    m_destination = destination;
+    setSpeed(destination - getPosition());
+}
+
+void Person::travelToCommunity(Community *community)
+{
+    setCommunity(community);
+    goTo(community->getCenter());
+}
+
+bool Person::hasArrived() const
+{
+    int market_radius = 10;
+    return getNorm(getDestination() - getPosition()) <= market_radius;
+}
+
 void Person::addInfectionDuration() { m_infection_duration++; }
 
 void Person::updateSpeed(const std::vector<Person> &people) 
 {
+
+    if(m_travelling)
+    {
+        if(hasArrived())
+        {
+            setSpeed({0,0});
+            m_travelling = false;
+        }
+        return;
+    }
+
     Position force{0,0};
     for(Person person : people)
     {       
@@ -53,6 +85,8 @@ void Person::updateSpeed(const std::vector<Person> &people)
     
     setSpeed(getSpeed() + force * (1/getMass()) * dt * SPEED_FACTOR);
 }
+
+
 
 bool Person::hasRecovered() const 
 {

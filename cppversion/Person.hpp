@@ -32,6 +32,8 @@ public:
 
     void update();
 
+    void commutePeopleTo(Community *community);
+
 
 };
 
@@ -41,8 +43,8 @@ class Person: public Point
     Health m_health_state = SUSCEPTIBLE;
     int m_infection_duration = 0;
     Community *m_community = nullptr;
-    bool travelling = false;
-    Position destination;
+    bool m_travelling = false;
+    Position m_destination;
     
 public:
     Person(Position position, Position speed=Position{0,0},
@@ -61,11 +63,19 @@ public:
 
     std::vector<Position> getBounds() const;
 
+    Position getDestination() const;
+
+    void goTo(Position destination);
+
+    void travelToCommunity(Community *community);
+
+    bool hasArrived() const;
+
     void addInfectionDuration();
 
-    bool hasRecovered() const;
-
     void updateSpeed(const std::vector<Person> &people);
+
+    bool hasRecovered() const;
 
     void contaminate(std::vector<Person> &people);
 
